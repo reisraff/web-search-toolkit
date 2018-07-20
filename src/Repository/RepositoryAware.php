@@ -14,16 +14,16 @@ trait RepositoryAware
         Collection $where,
         Collection $oderBy = null,
         Collection $joins = null,
-        Collection $aliases = null,
+        Collection $relationships = null,
         array $searchableColumns = [],
         bool $deleted = false
     ): void {
-        $getAlias = function ($field) use ($aliases) {
+        $getAlias = function ($field) use ($relationships) {
             $field = is_string($field) ? $field : $field->getField();
 
-            if ($aliases) {
-                foreach ($aliases as $alias) {
-                    $field = str_replace($alias->getEntry(), $alias->getAlias(), $field);
+            if ($relationships) {
+                foreach ($relationships as $relationship) {
+                    $field = str_replace($relationship->getEntry(), $relationship->getAlias(), $field);
                 }
             }
 
@@ -56,13 +56,13 @@ trait RepositoryAware
             }
         }
 
-        if ($aliases && $joins) {
+        if ($relationships && $joins) {
             foreach ($referencedFields as $field) {
-                foreach ($aliases as $alias) {
-                    if (0 !== strpos($field, $alias->getEntry())) {
+                foreach ($relationships as $relationship) {
+                    if (0 !== strpos($field, $relationship->getEntry())) {
                         continue;
                     }
-                    $joins->add($alias->getEntry());
+                    $joins->add($relationship->getEntry());
                     break;
                 }
             }
@@ -90,12 +90,12 @@ trait RepositoryAware
             sort($joins);
 
             foreach ($joins as $join) {
-                foreach ($aliases as $alias) {
-                    if ($alias->getEntry() !== $join) {
+                foreach ($relationships as $relationship) {
+                    if ($relationship->getEntry() !== $join) {
                         continue;
                     }
-                    $joinMethod = $alias->getJoinType() . 'Join';
-                    $queryBuilder->{$joinMethod}($alias->getJoinField(), $alias->getAlias());
+                    $joinMethod = $relationship->getJoinType() . 'Join';
+                    $queryBuilder->{$joinMethod}($relationship->getJoinField(), $relationship->getAlias());
                     break;
                 }
             }
@@ -108,4 +108,6 @@ trait RepositoryAware
             }
         }
     }
+
+    abstract protected function isSoftDeletable(): bool;
 }

@@ -6,7 +6,7 @@ namespace Search\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-class AliasCollection extends ArrayCollection
+class RelationshipCollection extends ArrayCollection
 {
     /**
      * Type of the elements.
@@ -31,7 +31,7 @@ class AliasCollection extends ArrayCollection
      */
     public function __construct(array $collection = [])
     {
-        $this->type = Alias::class;
+        $this->type = Relationship::class;
 
         foreach ($collection as $item) {
             if (! $this->checkType($item)) {

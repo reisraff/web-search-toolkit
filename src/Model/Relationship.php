@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Search\Model;
 
-class Alias
+class Relationship
 {
     /**
      * @var string

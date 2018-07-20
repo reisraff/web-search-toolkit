@@ -6,6 +6,7 @@ namespace Search\Repository;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
+use Search\Model\Search\Where;
 
 trait RepositoryAware
 {
@@ -34,11 +35,17 @@ trait RepositoryAware
 
         foreach ($where as $condition) {
             if ('search' === $condition->getField()) {
-                foreach ($searchableColumns as $col) {
-                    $queryBuilder->orWhere(
-                        $condition->getQueryExpr($queryBuilder, $col)
-                    );
+                if (Where::SPECIAL_TYPE === $condition->getType()) {
+                    $condition->setType(Where::BOTH_LIKE_TYPE);
                 }
+                $expressions = [];
+                foreach ($searchableColumns as $col) {
+                    $expressions[] = $condition->getQueryExpr($queryBuilder, $getAlias($col));
+                }
+                $queryBuilder->andWhere(
+                    $queryBuilder->expr()->orX(...$expressions)
+                );
+                $where->removeElement($condition);
                 continue;
             }
 

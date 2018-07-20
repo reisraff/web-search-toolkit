@@ -45,7 +45,7 @@ class AliasCollection extends ArrayCollection
             if ($aLength === $bLength) {
                 return 0;
             }
-            return $aLength < $bLength ? -1 : 1;
+            return $aLength > $bLength ? -1 : 1;
         });
 
         parent::__construct($collection);

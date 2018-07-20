@@ -86,6 +86,7 @@ trait RepositoryAware
             } while ($onMoreTime);
 
             $joins = $joins->toArray();
+            $joins = array_unique($joins);
             sort($joins);
 
             foreach ($joins as $join) {

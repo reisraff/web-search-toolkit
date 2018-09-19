@@ -16,6 +16,7 @@ class Search
      * @var int
      */
     private $page = 1;
+
     /**
      * @var int
      */
@@ -40,6 +41,11 @@ class Search
      * @var iterable
      */
     private $joins;
+
+    /**
+     * @var bool
+     */
+    private $isEnabledAllResults = false;
 
     public function __construct()
     {
@@ -193,6 +199,30 @@ class Search
     {
         $joins = is_array($joins) ? $joins : iterator_to_array($joins, false);
         $this->joins = new ArrayCollection($joins);
+
+        return $this;
+    }
+
+    /**
+     * Gets the value of isEnabledAllResults.
+     *
+     * @return bool
+     */
+    public function getIsEnabledAllResults(): bool
+    {
+        return $this->isEnabledAllResults;
+    }
+
+    /**
+     * Sets the value of isEnabledAllResults.
+     *
+     * @param bool $isEnabledAllResults the is enabled all results
+     *
+     * @return self
+     */
+    public function setIsEnabledAllResults(bool $isEnabledAllResults): self
+    {
+        $this->isEnabledAllResults = $isEnabledAllResults;
 
         return $this;
     }

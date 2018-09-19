@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Search\Service;
 
+use Search\Exception\AllResultsDisabledException;
 use Search\Exception\QueryNotFoundException;
 use Search\Model\Search;
 use Search\Repository\SearchInterface;
@@ -26,6 +27,9 @@ trait ServiceAware
         $pagerfanta = new Pagerfanta(new DoctrineORMAdapter($query));
 
         if (0 == $search->getPerPage()) {
+            if (!$search->getIsEnabledAllResults()) {
+                throw new AllResultsDisabledException();
+            }
             $result = $query->getResult();
             $search->setPage(1);
             $search->setPerPage((count($result) ? count($result) : 1));

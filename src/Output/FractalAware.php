@@ -27,29 +27,39 @@ trait FractalAware
     public function createItemResponse(
         $item,
         TransformerAbstract $transformer,
-        array $fields,
+        array $meta = [],
+        array $fields = [],
         int $code = JsonResponse::HTTP_OK
     ): JsonResponse {
         $this->parseOutput($fields);
 
         $resource = new Item($item, $transformer, 'data');
-        $array = $this->manager->createData($resource)->toArray();
+        $response = $this->manager->createData($resource)->toArray();
 
-        return new JsonResponse($array, $code);
+        if (count($meta)) {
+            $response['meta'] = $meta;
+        }
+
+        return new JsonResponse($response, $code);
     }
 
     public function createCollectionResponse(
         $collection,
         TransformerAbstract $transformer,
-        array $fields,
+        array $meta = [],
+        array $fields = [],
         $code = JsonResponse::HTTP_OK
     ): JsonResponse {
         $this->parseOutput($fields);
 
         $resource = new Collection($collection, $transformer, 'data');
-        $array = $this->manager->createData($resource)->toArray();
+        $response = $this->manager->createData($resource)->toArray();
 
-        return new JsonResponse($array, $code);
+        if (count($meta)) {
+            $response['meta'] = $meta;
+        }
+
+        return new JsonResponse($response, $code);
     }
 
     public function createCollectionResponseFromPaginator(

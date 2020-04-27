@@ -25,6 +25,6 @@
         "doctrine/orm": "^2.5",
         "linio/input": "dev-vix",
         "league/fractal": "^0.17.0",
-        "symfony/symfony": "3.3.*"
+        "symfony/symfony": "3.3.* || 3.4.*"
     }
 }
